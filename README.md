@@ -41,4 +41,4 @@ Now you can open your browser and start exploring the app.
 The app does not allow new user registation bue you can use the following credentials to Login.
 
 user:vitor
-pass: passwordvitor123
+pass: vitorpassword123
