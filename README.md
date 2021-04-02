@@ -27,3 +27,18 @@ virtual_env/Scripts/activate.bat
 
 pip install -r requirements.txt
 ```
+
+## Starting the Server
+
+```bash
+python manage.py runserver
+```
+
+## Using the App
+
+Now you can open your browser and start exploring the app.
+
+The app does not allow new user registation bue you can use the following credentials to Login.
+
+user:vitor
+pass: passwordvitor123
