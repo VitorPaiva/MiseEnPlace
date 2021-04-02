@@ -22,6 +22,10 @@ class Login(LoginView):
     template_name = 'manager/login.html'
     success_url = 'home'
 
+    def post(self, request, *args, **kargs):
+        post = super().post(request, *args, **kargs)
+        return render(request, self.template_name, {'username': request.POST.get('username')})
+
 #Ingredient List View
 def ingredients(request):
     search_query = request.GET.get('search', False)

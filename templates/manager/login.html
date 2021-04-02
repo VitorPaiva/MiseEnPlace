@@ -14,14 +14,14 @@
                 <div class="col s12">
                     <div class="input-field">
                         <i class="material-icons prefix">person</i>
-                        <input id="icon_prefix" name="username" type="text" onclass="validate">
+                        <input required id="icon_prefix" name="username" type="text" onclass="validate">
                         <label for="icon_prefix">Username</label>
                     </div>
                 </div>
                 <div class="col s12">
                     <div class="input-field">
                         <i class="material-icons prefix">lock</i>
-                        <input id="icon_prefix" name="password" type="password" onclass="validate">
+                        <input required id="icon_prefix" name="password" type="password" onclass="validate">
                         <label for="icon_prefix">Password</label>
                     </div>
                 </div>
@@ -31,6 +31,22 @@
             </div>
         </form>
     </div>
+    <script>
+        if('{{username}}'){
+            $('[name="username"]').val('{{username}}')
+            M.toast({
+                html: '<i class="material-icons prefix mr-2">error_outline</i> Wrong credentials <a href="javascript:void(0)" onclick="dismissToast()"><i class="material-icons prefix right lime-text text-accent-2">close</i></a>',
+                displayLength: '3000',
+
+            })
+        }
+
+        function dismissToast(){
+            var toastElement = document.querySelector('.toast');
+            var toastInstance = M.Toast.getInstance(toastElement);
+            toastInstance.dismiss();
+        }
+    </script>
 {% endblock %}
 
 {% block script %}
