@@ -3,7 +3,7 @@
 MiseEnPlace is a recipe manager web application built with Django and Python3 in response to a challenge by Apicbase.
 
 ## Demo Version
-[MiseEnPlace Demo](https://iamvitorpaiva.pythoneverywhere.com)
+[MiseEnPlace Demo](http://iamvitorpaiva.pythonanywhere.com/)
 
 ## Download
 
