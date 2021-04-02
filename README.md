@@ -1,29 +1,29 @@
-# Foobar
+# MiseEnPlace
 
-Foobar is a Python library for dealing with word pluralization.
+MiseEnPlace is a recipe manager web application built with Django and Python3 in response to a challenge by Apicbase.
 
-## Installation
-
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+## Download
 
 ```bash
-pip install foobar
+git clone https://github.com/VitorPaiva/MiseEnPlace
 ```
 
-## Usage
+Or
 
-```python
-import foobar
+Download the repo directly from this page
 
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
+## Setup Virtual Environment
+
+```bash
+cd ./MiseEnPlace
+
+python3 -m venv virtual_env
+
+#Linux or MacOS
+source ./virtual_env/bin/activate
+
+#Windows
+virtual_env/Scripts/activate.bat
+
+pip install -r requirements.txt
 ```
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
