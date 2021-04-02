@@ -1,0 +1,90 @@
+{% extends "../base_layout.html" %}
+{% load static %}
+{% block title %} Recipes {% endblock %}
+{% block recipes %}active{%endblock%}
+
+{% block content %}
+    <div class="container mt-3 {% if anim %}enter-ingredients{% endif %}">
+        <div class="row grey lighten-5 search-bar">
+            <form method="GET">
+                <div class="input-field col s9">
+                    <i class="material-icons prefix">search</i>
+                    <input id="icon_prefix" name="search" type="text" onclass="validate">
+                    <span class="helper-text" data-error="wrong" data-success="right">Search by recipe name or ingredient name</span>
+                    <label for="icon_prefix">Search</label>
+                </div>
+                <div class="input-field col s2">
+                    <select id="currency" name="currency">
+                        {% for currency in currencies %}
+                            <option value="{{currency.label}}">{{currency.label}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="currency">Currency</label>
+                </div>
+            </form>
+            <div class="input-field col s1">
+                <a class="btn-floating btn waves-effect waves-light" href="{% url "manager:create_recipe" %}"><i class="material-icons">add</i></a>
+            </div>
+        </div>
+        <div class="row">
+            {% if recipes|length == 0 %}
+                <div class="center">
+                    <h4>No data</h4>
+                </div>
+            {% else %}
+                {% for recipe in recipes %}
+                    <div class="col s4">
+                        <div class="card">
+                            <div class="card-image waves-effect waves-block waves-light overflow-visible">
+                                <img class="activator h-200 of-cover" src="/media/{{ recipe.image }}">
+                                    <a class="btn-floating halfway-fab waves-effect waves-light" href="./{{recipe.slug}}"><i class="material-icons">edit</i></a>
+                                </div>
+                            <div class="card-content">
+                                <span class="card-title activator grey-text text-darken-4">{{recipe}}</span>
+                                Price: {{recipe.currency.currency.symbol}}{{recipe.price}} | Difficulty: {{recipe.difficulty}}
+                            </div>
+                            <div class="card-reveal">
+                                <span class="card-title grey-text text-darken-4"><b>{{recipe}}</b><i class="material-icons right">close</i></span>
+                                <ul>
+                                    <div class="mb-2"><b>Ingredients:</b></div>
+                                    {% for ingredient in recipe.ingredients %}
+                                        <li> {{ ingredient.ingredient.name }} {{ ingredient.get_normalized }}{{ ingredient.unit }}</li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="card-action center">
+                                    <a href="./{{recipe.slug}}/details" class="m-0">More Detail...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <script>
+
+        const search_bar = $("[name='search']")
+        const currency = $("[name='currency']")
+        const urlParams = new URLSearchParams(window.location.search)
+
+        search_bar.focus();
+        search_bar.val(urlParams.get('search'))
+        currency.val(urlParams.get('currency') || 'EUR')
+        
+        $('tr[data-url]').click(function (e) {
+            window.location.href = $(this).data('url')
+        });
+
+        search_bar.keyup(function(event) {
+            if (event.keyCode === 13) {
+                $('form').submit()
+            }
+        }); 
+
+        currency.change(function(event) {
+            $('form').submit()
+        }); 
+
+    </script>
+{% endblock %}
+

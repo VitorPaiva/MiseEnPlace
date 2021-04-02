@@ -1,0 +1,89 @@
+{% extends "../base_layout.html" %}
+{% load static %}
+{% block title %} Ingredients {% endblock %}
+{% block ingredients %}active{%endblock%}
+
+{% block content %}
+    <div class="container mt-3 {% if anim %}enter-ingredients{% endif %}">
+        <div class="row grey lighten-5 search_bar">
+            <form method="GET">
+                <div class="input-field col s9">
+                    <i class="material-icons prefix">search</i>
+                    <input id="icon_prefix" name="search" type="text" onclass="validate">
+                    <span class="helper-text" data-error="wrong" data-success="right">Search by ingredient name or article number</span>
+                    <label for="icon_prefix">Search</label>
+                </div>
+                <div class="input-field col s2">
+                    <select id="currency" name="currency">
+                        <option value=''>No convertion</option>
+                        {% for currency in currencies %}
+                            <option value="{{currency.label}}">{{currency.label}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="currency">Currency</label>
+                </div>
+            </form>
+            <div class="input-field col s1">
+                <a class="btn-floating btn waves-effect waves-light" href="{% url "manager:create_ingredient" %}"><i class="material-icons">add</i></a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Ingredients</span>
+                <div class="overflow-scroll mh-60v">
+                    <table class="highlight">
+                        <thead>
+                            <tr>
+                                <th>Article Number</th>
+                                <th>Ingredient</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if ingredients|length == 0 %}
+                                <tr data-url="{{ingredient.get_absolute_url}}">
+                                    <td>No data</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            {% else %}
+                                {% for ingredient in ingredients %}
+                                    <tr data-url="{{ingredient.get_absolute_url}}">
+                                        <td>{{ingredient.article_number}}</td>
+                                        <td>{{ingredient.name}}</td>
+                                        <td>{{ingredient.currency.symbol}}{{ingredient.price}} / {{ingredient.get_normalized}}{{ingredient.unit}}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        const search_bar = $("[name='search']")
+        const currency = $("[name='currency']")
+        const urlParams = new URLSearchParams(window.location.search)
+
+        search_bar.focus();
+        search_bar.val(urlParams.get('search'))
+        currency.val(urlParams.get('currency'))
+
+        $('tr[data-url]').click(function (e) {
+            window.location.href = $(this).data('url')
+        });
+
+        search_bar.keyup(function(event) {
+            if (event.keyCode === 13) {
+                $('form').submit()
+            }
+        }); 
+
+        currency.change(function(event) {
+            $('form').submit()
+        }); 
+
+    </script>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="grey lighten-5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'manager/css/anim.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'manager/css/style.css' %}">
+    <title>{% block title %} Base Layout {% endblock %}</title>
+</head>
+<body>
+    {% block nav %}
+        <div class="navbar-fixed">
+            <nav class="grey lighten-5">
+                <div class="nav-wrapper container">
+                    <a href="/" class="brand-logo center grey-text text-darken-4">
+                        MiseEnPlace
+                    </a>
+                    <a href="#" data-target="menu" class="sidenav-trigger black-text"><i class="material-icons">menu</i></a>
+                    <ul class="right hide-on-med-and-down {% block menu-anim %}{%endblock%}"> 
+                        <li class="{% block recipes %}{%endblock%}"><a href="{% url 'manager:recipes' %}" class="grey-text text-darken-4">Recipes</a></li>
+                        <li class="{% block ingredients %}{%endblock%}"><a href="{% url 'manager:ingredients' %}" class="grey-text text-darken-4">Ingredients</a></li>
+                        {% if not user.is_authenticated %} <li><a href="{% url 'manager:login' %}" class="grey-text text-darken-4">Login</a></li>
+                        {% else %} <li><a href="{% url 'manager:logout' %}" class="grey-text text-darken-4">Logout</a></li> {% endif %}
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    {% endblock %}
+    <ul class="sidenav" id="menu">
+        <li><a href="{% url 'manager:recipes' %}" class="grey-text text-darken-4">Recipes</a></li>
+        <li><a href="{% url 'manager:ingredients' %}" class="grey-text text-darken-4">Ingredients</a></li>
+        {% if not user.is_authenticated %} <li><a href="{% url 'manager:login' %}" class="grey-text text-darken-4">Login</a></li>
+        {% else %} <li><a href="{% url 'manager:logout' %}" class="grey-text text-darken-4">Logout</a></li> {% endif %}
+    </ul>
+    <div id="content">
+        {% block content %} {% endblock %}
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('.sidenav').sidenav();
+            $('select').formSelect();
+        });
+    </script>
+</body>
+</html>

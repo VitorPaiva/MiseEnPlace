@@ -1,0 +1,144 @@
+{% extends "../base_layout.html" %}
+{% load static %}
+{% block title %} Create Recipe {% endblock %}
+
+{% block content %}
+    <div class="container enter-ingredients">
+        <div class="card w-100">
+            <div class="card-content">
+                <span class="card-title">{% block card_title %} Create New Recipe {% endblock %}</span>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        {% for field in form %}
+                            <div class="input-field col 
+                                {% if field.name == 'recipe_text'%}
+                                    s12
+                                {% else %}
+                                    s6
+                                {% endif %}
+                            ">
+                                {{field}}
+                                <label>{{field.label}}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="ingredients" value=""/>
+                    <div class="row">
+                        <div class="input-field col s5 ingredient-select">
+                            <label class="active">Ingredient</label>
+                            <select name="ingredient">
+                                {% for ingredient in ingredients %}
+                                    <option value="{{ingredient}}">{{ingredient}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="input-field col s3">
+                            <input type="number" name="quantity"/>
+                            <label>Quantity</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <select name="unit">
+                                {% for unit in units %}
+                                    <option value="{{unit}}">{{unit.label}}</option>
+                                {% endfor %}
+                            </select>
+                            <label>Unit</label>
+                        </div>
+                        <div class="input-field col s1">
+                            <a id="addIngredient" class="btn-floating btn waves-effect waves-light"><i class="material-icons">add</i></a>                        
+                        </div>
+                    </div>
+                    <div id="ingredientList" class="row" >
+                    
+                    </div>
+                    <div class="card-action center pb-0">
+                        <input class="btn" disabled type="submit" name="submit"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <style>
+        input[type="file"]{
+            display:none;
+        }
+
+        .upload {
+            margin-top:10px;
+        }
+    </style>
+    <script>
+        $(document).ready(function(){
+            $('.modal').modal();
+            {% block javascript %} {% endblock %}
+        });
+
+        let ingredients = []
+        const imageLabel = $('input[type="file"]~label')
+        const fileInput = $('input[type="file"]')
+
+        imageLabel.addClass('active')
+        imageLabel.after('<a class="waves-effect waves-dark btn blue lighten-1 upload"><i class="material-icons right">upload</i><span id="filename">Add Image</span></a>')
+    
+        const upload = $('.upload')
+        upload.click(function(){
+            fileInput.click();
+        })
+
+        fileInput.change(function(){
+            const name = this.files[0]?.name || 'Add Image'
+            $('#filename').text(name)
+        })
+
+        $('#addIngredient').click(function(){
+            const ingredient = $('[name="ingredient"]')
+            const quantity = $('[name="quantity"]')
+
+            if(quantity.val() > 0){
+                ingredients.push({
+                    ingredient: ingredient.val(),
+                    quantity: quantity.val(),
+                    unit: $('[name="unit"]').val(),
+                })
+                $(`option[value="${ingredient}"]`).prop('disabled', true)
+                quantity.val('')
+            }
+            updateData()
+        })
+        
+        function updateData(){
+            $('[name="ingredients"]').val('')
+            $('[name="submit"]').prop('disabled', ingredients.length === 0)
+            $(`select[name="ingredient"] option`).prop('disabled', false)
+            buildIngredientList()
+        }
+
+        function buildIngredientList(){
+            const list = $('#ingredientList');
+            list.empty()
+            ingredients.forEach((value, index) => {
+                $('[name="ingredients"]').val(`${$('[name="ingredients"]').val()}${value.ingredient},${value.quantity},${value.unit};`)
+                $(`option[value="${value.ingredient}"]`).prop('disabled', true)
+                $('select').formSelect();
+                list.append(`<div class="input-field col s5">
+                    ${value.ingredient}
+                </div>
+                <div class="input-field col s3">
+                    ${value.quantity}
+                </div>
+                <div class="input-field col s3">
+                    ${value.unit}
+                </div>
+                <div class="input-field col s1">
+                    <a onclick="removeIngredient(${index})" class="btn-floating btn waves-effect waves-light red lighten-2"><i class="material-icons">remove</i></a>
+                </div>`)
+            })
+        }
+
+        function removeIngredient(index){
+            ingredients.splice(index, 1);
+            updateData()
+        }
+    </script>
+{% endblock %}

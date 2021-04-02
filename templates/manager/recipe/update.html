@@ -1,0 +1,16 @@
+{% extends "./create.html" %}
+{% load static %}
+{% block title %} Update Recipe {% endblock %}
+{% block card_title %} Update Recipe {% endblock %}
+
+
+{% block javascript %}
+    {% for ingredient in recipe_ingredients%}
+        ingredients.push({
+            ingredient: '{{ingredient.ingredient}}',
+            quantity: '{{ingredient.quantity.normalize}}',
+            unit: '{{ingredient.unit}}',
+        })
+    {% endfor %}
+    updateData()
+{% endblock %}

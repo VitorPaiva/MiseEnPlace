@@ -1,0 +1,106 @@
+{% extends "../base_layout.html" %}
+{% load static %}
+{% block title %} {{ recipe }} {% endblock %}
+
+{% block content %}
+    <div class="container enter-ingredients mw-50">
+        <div class="card w-100">
+            <div class="card-image overflow-visible">
+                <img class="h-300 of-cover" src="/media/{{ recipe.image }}">
+            </div>
+            <div class="card-content overflow-hidden">
+                <span class="card-title activator grey-text text-darken-4 mb-24p">
+                    <div class="row">
+                        <div class="col s9 pl-0">
+                            {{recipe}}
+                        </div>
+                        <div class="col s3 pl-0 mt-m20p">
+                            <form method="GET">
+                                <div class="input-field col s">
+                                    <select id="currency" name="currency">
+                                        {% for currency in currencies %}
+                                            <option value="{{currency.label}}">{{currency.label}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="currency">Currency</label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s4 pl-0">
+                            <small>Price: {{currency.symbol}}{{price}}</small>
+                        </div>
+                        <div class="col s4 center-align pl-0">
+                            <small>Difficulty: {{recipe.difficulty}}</small>
+                        </div>
+                        <div class="col s4 center-align pl-0">
+                            <small>Portions: {{recipe.portions}}</small>
+                        </div>
+                    </div>
+                </span>
+                
+                <div class="row">
+                    <h6>Ingredients</h6>
+                    {% for ingredient in ingredients %}
+                        <div class="col s3 pl-0 mb-3">
+                            {{ingredient.get_normalized}}{{ingredient.unit}} {{ingredient.ingredient}}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="row" id="recipe">
+                    <h6>Recipe</h6>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container enter-ingredients">
+        <div class="row">
+            <div class="col s12">
+                <h5>You may also like:</h5>
+            </div>
+            {% for recipe in recipes %}
+                <div class="col s4">
+                    <div class="card">
+                        <div class="card-image waves-effect waves-block waves-light overflow-visible">
+                            <img class="activator h-200 of-cover" src="/media/{{ recipe.image }}">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title activator grey-text text-darken-4">{{recipe}}</span>
+                            Price: {{recipe.currency.currency.symbol}}{{recipe.price}} | Difficulty: {{recipe.difficulty}}
+                        </div>
+                        <div class="card-reveal">
+                            <span class="card-title grey-text text-darken-4"><b>{{recipe}}</b><i class="material-icons right">close</i></span>
+                            <ul>
+                                <div class="mb-2"><b>Ingredients:</b></div>
+                                {% for ingredient in recipe.ingredients %}
+                                    <li> {{ ingredient.ingredient.name }} {{ ingredient.get_normalized }}{{ ingredient.unit }}</li>
+                                {% endfor %}
+                            </ul>
+                            <div class="card-action center">
+                                <a href="{% url 'manager:recipes' %}{{recipe.slug}}/details" class="m-0">More Detail...</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        const currency = $("[name='currency']")
+        const urlParams = new URLSearchParams(window.location.search)
+        currency.val(urlParams.get('currency') || 'EUR')
+        currency.change(function(event) {
+            $('form').submit()
+        }); 
+
+        $('#recipe').append(
+            {% if recipe.recipe_text|length > 0 %}
+                `{{recipe.get_recipe_text_html}}`.replaceAll('&lt;br/&gt;', '<br/>')
+            {% else %}
+                'No Recipe'
+            {% endif %}
+        )
+    </script>
+{% endblock %}

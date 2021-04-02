@@ -1,0 +1,27 @@
+{% extends "../base_layout.html" %}
+{% load static %}
+{% block title %} Create Ingredient {% endblock %}
+
+{% block content %}
+    <div class="container valign-wrapper enter-ingredients h-100v mt-m64p">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">{% block card_title %}Create New Ingredient {% endblock %}</span>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        {% for field in form %}
+                            <div class="input-field col s6">
+                                {{field}}
+                                <label>{{field.label}}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="card-action center pb-0">
+                        <input class="btn" type="submit"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

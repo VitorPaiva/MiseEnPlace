@@ -1,0 +1,37 @@
+{% extends "./base_layout.html" %}
+{% load static %}
+{% block title %} MiseEnPlace {% endblock %}
+{% block menu-anim %}enter-content{%endblock%}
+
+{% block content %}
+    <div class="container valign-wrapper landing">
+        <div class="row valign-wrapper exit-first">
+            <div class="col s6">
+                <img class="responsive-img slide-right" src="{% static 'manager/img/home-1.svg' %}">
+            </div>
+            <div class="col s6">
+                <blockquote class="blue-border lighten-2 appear">
+                    <p>Mise en place,
+                    all the organization, the planning, the thinking forward, the peeling, the chopping, the washing, the shaping,...</p>
+                    <p>Professional cook, or home cook, you're only as good as your mise en place.</p>
+                    <cite>Michael Bonacini</cite>
+                </blockquote>
+            </div>
+        </div>
+
+        <div class="container valign-wrapper enter-content mt-50p pos-abs">
+            <h6 class="subtitle">Your Collaborative Recipe Repository</h6>
+            <div class="row valign-wrapper mt-50p">
+                <div class="col s3 center bounce-in-fwd-first">
+                    <a class="waves-effect waves-light btn blue lighten-1" href="/recipes"><i class="material-icons right">menu_book</i>Recipes</a>
+                </div>
+                <div class="col s6">
+                    <img class="responsive-img enter-content" src="{% static 'manager/img/home-2.svg' %}">
+                </div>
+                <div class="col s3 center bounce-in-fwd-second">
+                    <a class="waves-effect waves-dark btn blue lighten-1" href="/ingredients"><i class="material-icons right">kitchen</i>Ingredients</a>             
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
