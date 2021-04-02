@@ -24,7 +24,13 @@ class Login(LoginView):
 
     def post(self, request, *args, **kargs):
         post = super().post(request, *args, **kargs)
-        return render(request, self.template_name, {'username': request.POST.get('username')})
+        
+        if(post.status_code == 302):
+            return post
+        else:
+            return render(request, 
+                     self.template_name, 
+                      {'username': request.POST.get('username')})
 
 #Ingredient List View
 def ingredients(request):
